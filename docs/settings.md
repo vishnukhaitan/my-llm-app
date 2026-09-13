@@ -60,9 +60,10 @@ Values are coerced to the field type: `"0.2"` becomes `float`, `"2000"` becomes 
 
 | Field | Env var | Required | Default | Notes |
 |---|---|---|---|---|
-| `openai_api_key` | `OPENAI_API_KEY` | Yes (`min_length=1`) | — | Never hard-code in source |
-| `openai_model` | `OPENAI_MODEL` | Yes (`min_length=1`) | — | Example: `gpt-4o-mini` |
+| `openai_api_key` | `OPENAI_API_KEY` | Yes, unless `USE_FAKE=true` | `""` | Never hard-code in source |
+| `openai_model` | `OPENAI_MODEL` | Yes, unless `USE_FAKE=true` | `gpt-4o-mini` | |
 | `openai_base_url` | `OPENAI_BASE_URL` | No | `None` | Vocareum: `https://openai.vocareum.com/v1`. Empty string becomes `None` |
+| `use_fake` | `USE_FAKE` | No | `false` | Skip the real API; see [fake_llm.md](fake_llm.md) |
 | `app_env` | `APP_ENV` | No | `development` | |
 | `app_name` | `APP_NAME` | No | `my-llm-app` | |
 | `log_level` | `LOG_LEVEL` | No | `INFO` | |
@@ -81,7 +82,7 @@ If the value is a URL, it is passed through as `OpenAI(base_url=...)`.
 
 ## Failure behavior
 
-Missing or empty `OPENAI_API_KEY` / `OPENAI_MODEL` raises `pydantic.ValidationError` at startup. That is intentional: fail before an API call.
+Missing or empty `OPENAI_API_KEY` / `OPENAI_MODEL` raises `pydantic.ValidationError` when `USE_FAKE` is false. That is intentional: fail before an API call. Fake mode may omit the key.
 
 ## Inspect without printing the key
 

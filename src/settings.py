@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from typing import Self
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,9 +19,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    openai_api_key: str = Field(min_length=1)
-    openai_model: str = Field(min_length=1)
+    openai_api_key: str = ""
+    openai_model: str = "gpt-4o-mini"
     openai_base_url: str | None = None
+    use_fake: bool = False
     app_env: str = "development"
     app_name: str = "my-llm-app"
     log_level: str = "INFO"
@@ -35,6 +37,16 @@ class Settings(BaseSettings):
         if value == "":
             return None
         return value
+
+    @model_validator(mode="after")
+    def require_credentials_unless_fake(self) -> Self:
+        if self.use_fake:
+            return self
+        if not self.openai_api_key:
+            raise ValueError("OPENAI_API_KEY is required when USE_FAKE is false")
+        if not self.openai_model:
+            raise ValueError("OPENAI_MODEL is required when USE_FAKE is false")
+        return self
 
 
 @lru_cache
