@@ -17,7 +17,7 @@ cp .env.example .env
 
 Configuration is loaded by `src/settings.py` (`pydantic-settings`) from `.env`. See [docs/settings.md](docs/settings.md).
 
-Feature notes live under [docs/](docs/README.md).
+LLM request/response shapes are `Question` and `Answer` in `src/models.py`. See [docs/models.md](docs/models.md).
 
 ## Run smoke test
 
