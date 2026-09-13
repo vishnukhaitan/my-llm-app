@@ -36,3 +36,5 @@ USE_FAKE=true python -m src.main
 ```bash
 pytest
 ```
+
+In Cursor / VS Code: select the `.venv` interpreter, then use the Testing sidebar (flask icon) or Run and Debug → **pytest**. Do not use “Run Python File” on a test — that causes `No module named 'src'`.

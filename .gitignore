@@ -22,7 +22,9 @@ htmlcov/
 .mypy_cache/
 
 # IDE / OS
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
 .idea/
 .DS_Store
 Thumbs.db
