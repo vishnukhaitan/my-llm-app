@@ -27,7 +27,7 @@ q = Question(question="What is RAG?")
 | Field | Type | Default | Later |
 |---|---|---|---|
 | `content` | `str` | required | LLM text |
-| `cost_usd` | `float` | `0.0` | Step 4–5: real cost from tokens |
+| `cost_usd` | `float` | `0.0` | Step 5: fill via `src/cost.py` (table exists now) |
 | `retries` | `int` | `0` | Step 5: retry count |
 | `confidence` | `float` | `1.0` (0.0–1.0) | Step 6: tool-calling |
 | `sources` | `list[str]` | `[]` | Step 6: tool-calling |

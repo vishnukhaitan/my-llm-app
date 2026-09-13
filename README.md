@@ -21,6 +21,8 @@ LLM request/response shapes are `Question` and `Answer` in `src/models.py`. See 
 
 Offline answers: `USE_FAKE=true` (see [docs/fake_llm.md](docs/fake_llm.md)).
 
+Token pricing helper: [docs/cost.md](docs/cost.md) (`src/cost.py`).
+
 ## Run smoke test
 
 ```bash
