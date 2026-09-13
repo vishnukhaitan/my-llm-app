@@ -1,29 +1,16 @@
-import os
+"""Back-compat exports. New code should import Settings from src.settings."""
 
-from dotenv import load_dotenv
+from src.settings import Settings
 
-load_dotenv()
+_settings = Settings()
 
-_openai_api_key = os.getenv("OPENAI_API_KEY")
-_openai_model = os.getenv("OPENAI_MODEL")
-OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
-APP_ENV = os.getenv("APP_ENV", "development")
-APP_NAME = os.getenv("APP_NAME", "my-llm-app")
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.2"))
-LLM_MAX_OUTPUT_TOKENS = int(os.getenv("LLM_MAX_OUTPUT_TOKENS", "2000"))
-HOST = os.getenv("HOST", "0.0.0.0")
-PORT = int(os.getenv("PORT", "8000"))
-
-if not _openai_api_key:
-    raise RuntimeError(
-        "OPENAI_API_KEY environment variable is not configured."
-    )
-
-if not _openai_model:
-    raise RuntimeError(
-        "OPENAI_MODEL environment variable is not configured."
-    )
-
-OPENAI_API_KEY: str = _openai_api_key
-OPENAI_MODEL: str = _openai_model
+OPENAI_API_KEY = _settings.openai_api_key
+OPENAI_MODEL = _settings.openai_model
+OPENAI_BASE_URL = _settings.openai_base_url
+APP_ENV = _settings.app_env
+APP_NAME = _settings.app_name
+LOG_LEVEL = _settings.log_level
+LLM_TEMPERATURE = _settings.llm_temperature
+LLM_MAX_OUTPUT_TOKENS = _settings.llm_max_output_tokens
+HOST = _settings.host
+PORT = _settings.port

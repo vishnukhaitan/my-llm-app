@@ -15,6 +15,10 @@ cp .env.example .env
 # OPENAI_BASE_URL=https://openai.vocareum.com/v1
 ```
 
+Configuration is loaded by `src/settings.py` (`pydantic-settings`) from `.env`. See [docs/settings.md](docs/settings.md).
+
+Feature notes live under [docs/](docs/README.md).
+
 ## Run smoke test
 
 ```bash
