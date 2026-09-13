@@ -77,6 +77,8 @@ Values are coerced to the field type: `"0.2"` becomes `float`, `"2000"` becomes 
 
 Copy `.env.example` to `.env` and fill `OPENAI_API_KEY` and `OPENAI_MODEL`. Vocareum keys (`voc-...`) need `OPENAI_BASE_URL` set to the Vocareum gateway.
 
+To see `_answer_from_response` step logs, set `LOG_LEVEL=DEBUG` then `python -m src.main`.
+
 ## Empty base URL
 
 If `OPENAI_BASE_URL=` is blank, a validator converts it to `None`. Then `OpenAI()` uses the SDK default host (`https://api.openai.com/v1`).

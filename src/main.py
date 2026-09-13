@@ -1,3 +1,5 @@
+import json
+import logging
 import time
 
 import openai
@@ -7,6 +9,9 @@ from src.cost import compute_cost_usd
 from src.fake_llm import FakeLLMError, fake_ask_llm
 from src.models import Answer, Question
 from src.settings import Settings, get_settings
+from src.tools import ANSWER_TOOL
+
+logger = logging.getLogger(__name__)
 
 _RETRYABLE = (
     FakeLLMError,
@@ -23,6 +28,61 @@ def _make_client(settings: Settings) -> OpenAI:
     return OpenAI(api_key=settings.openai_api_key)
 
 
+def _cost_from_usage(settings: Settings, usage: object | None) -> float:
+    return compute_cost_usd(
+        settings.openai_model,
+        getattr(usage, "prompt_tokens", 0) if usage else 0,
+        getattr(usage, "completion_tokens", 0) if usage else 0,
+    )
+
+
+def _answer_from_response(response: object, settings: Settings) -> Answer:
+    """Map a ChatCompletion (or a test double) onto Answer."""
+    logger.debug("step 1: map SDK response model=%s", settings.openai_model)
+    choices = getattr(response, "choices", None) or []
+    logger.debug("step 2: n_choices=%s", len(choices))
+    if not choices:
+        raise RuntimeError("LLM response has no choices")
+
+    message = choices[0].message
+    finish_reason = getattr(choices[0], "finish_reason", None)
+    content_preview = (getattr(message, "content", None) or "")[:120]
+    logger.debug(
+        "step 3: finish_reason=%s content_preview=%r",
+        finish_reason,
+        content_preview,
+    )
+
+    tool_calls = getattr(message, "tool_calls", None) or []
+    usage = getattr(response, "usage", None)
+    logger.debug(
+        "step 4: n_tool_calls=%s usage=%s",
+        len(tool_calls),
+        usage,
+    )
+    cost = _cost_from_usage(settings, usage)
+    logger.debug("step 5: cost_usd=%s", cost)
+
+    if tool_calls:
+        raw_args = tool_calls[0].function.arguments
+        logger.debug("step 6: tool raw arguments=%r", raw_args)
+        args = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+        logger.debug("step 7: parsed tool args keys=%s", list(args.keys()))
+        answer = Answer(
+            content=args["content"],
+            confidence=args["confidence"],
+            sources=args.get("sources", []),
+            cost_usd=cost,
+        )
+        logger.debug("step 8: Answer from tool_calls %s", answer.model_dump())
+        return answer
+
+    logger.debug("step 6: no tool_calls; fallback to message.content")
+    answer = Answer(content=getattr(message, "content", None) or "", cost_usd=cost)
+    logger.debug("step 7: Answer from content fallback %s", answer.model_dump())
+    return answer
+
+
 def _call_real_llm(question: Question, settings: Settings) -> Answer:
     # Vocareum and similar OpenAI-compatible gateways support Chat Completions,
     # not the newer Responses API used by api.openai.com.
@@ -31,17 +91,15 @@ def _call_real_llm(question: Question, settings: Settings) -> Answer:
         messages=[{"role": "user", "content": question.question}],
         temperature=settings.llm_temperature,
         max_tokens=settings.llm_max_output_tokens,
+        tools=[ANSWER_TOOL],
+        tool_choice={
+            "type": "function",
+            "function": {"name": "answer_question"},
+        },
     )
     if hasattr(response, "model_dump"):
         print(response.model_dump())
-    content = response.choices[0].message.content or ""
-    usage = response.usage
-    cost = compute_cost_usd(
-        settings.openai_model,
-        usage.prompt_tokens if usage else 0,
-        usage.completion_tokens if usage else 0,
-    )
-    return Answer(content=content, cost_usd=cost)
+    return _answer_from_response(response, settings)
 
 
 def ask_llm(question: Question, settings: Settings | None = None) -> Answer:
@@ -66,8 +124,17 @@ def ask_llm(question: Question, settings: Settings | None = None) -> Answer:
 
 
 if __name__ == "__main__":
+    settings = get_settings()
+    logging.basicConfig(
+        level=getattr(logging, settings.log_level.upper(), logging.INFO),
+        format="%(levelname)s %(name)s: %(message)s",
+    )
     answer = ask_llm(
-        Question(question="Explain retrieval-augmented generation in three sentences.")
+        Question(question="Explain retrieval-augmented generation in three sentences."),
+        settings=settings,
     )
     print(answer.content)
-    print(f"cost_usd={answer.cost_usd} retries={answer.retries}")
+    print(
+        f"cost_usd={answer.cost_usd} retries={answer.retries} "
+        f"confidence={answer.confidence} sources={answer.sources}"
+    )

@@ -25,6 +25,8 @@ Token pricing helper: [docs/cost.md](docs/cost.md) (`src/cost.py`).
 
 Retries and real-path cost: [docs/ask_llm.md](docs/ask_llm.md).
 
+Structured answers via tools: [docs/tools.md](docs/tools.md).
+
 ## Run smoke test
 
 ```bash

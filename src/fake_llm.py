@@ -16,4 +16,8 @@ def fake_ask_llm(question: Question, fail_rate: float = 0.0) -> Answer:
     """
     if random.random() < fail_rate:
         raise FakeLLMError(f"simulated transient failure for: {question.question[:40]}")
-    return Answer(content=f"[FAKE] {question.question}")
+    return Answer(
+        content=f"[FAKE] {question.question}",
+        confidence=1.0,
+        sources=[],
+    )

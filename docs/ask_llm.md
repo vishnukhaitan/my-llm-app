@@ -53,4 +53,4 @@ USE_FAKE=true FAIL_RATE=0 python -m src.main
 
 ## Not in this step
 
-Tool-calling (`confidence` / `sources` from the model) is Step 6. SQLite and FastAPI come after that.
+SQLite and FastAPI come after tool-calling. See [tools.md](tools.md).

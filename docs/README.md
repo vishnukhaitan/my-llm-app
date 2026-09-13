@@ -9,5 +9,6 @@ Markdown notes for features and code in `my-llm-app`.
 | [fake_llm.md](fake_llm.md) | `src/fake_llm.py` |
 | [cost.md](cost.md) | `src/cost.py` |
 | [ask_llm.md](ask_llm.md) | `src/main.py` |
+| [tools.md](tools.md) | `src/tools.py` |
 
 Add a new `.md` file here when a feature is implemented (models, pipeline, API, and so on).
