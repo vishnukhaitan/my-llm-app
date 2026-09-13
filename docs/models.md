@@ -27,8 +27,8 @@ q = Question(question="What is RAG?")
 | Field | Type | Default | Later |
 |---|---|---|---|
 | `content` | `str` | required | LLM text |
-| `cost_usd` | `float` | `0.0` | Step 5: fill via `src/cost.py` (table exists now) |
-| `retries` | `int` | `0` | Step 5: retry count |
+| `cost_usd` | `float` | `0.0` | Real path: `compute_cost_usd` from `response.usage` |
+| `retries` | `int` | `0` | Set by `ask_llm` after retries |
 | `confidence` | `float` | `1.0` (0.0–1.0) | Step 6: tool-calling |
 | `sources` | `list[str]` | `[]` | Step 6: tool-calling |
 | `schema_version` | `str` | `"v1"` | Bump only on breaking changes |

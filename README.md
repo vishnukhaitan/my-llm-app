@@ -23,6 +23,8 @@ Offline answers: `USE_FAKE=true` (see [docs/fake_llm.md](docs/fake_llm.md)).
 
 Token pricing helper: [docs/cost.md](docs/cost.md) (`src/cost.py`).
 
+Retries and real-path cost: [docs/ask_llm.md](docs/ask_llm.md).
+
 ## Run smoke test
 
 ```bash

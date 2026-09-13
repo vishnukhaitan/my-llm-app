@@ -45,4 +45,4 @@ cost = compute_cost_usd("gpt-4o-mini", prompt_tokens=100, completion_tokens=50)
 
 ## Not in this step
 
-`ask_llm` still returns `Answer(content=...)` with `cost_usd=0.0`. Fake answers also stay at `0.0`. Real usage + retries come in Step 5.
+Tool-calling is still later. Cost is applied in `ask_llm` on the real path; see [ask_llm.md](ask_llm.md).

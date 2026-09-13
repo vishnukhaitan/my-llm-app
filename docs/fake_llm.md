@@ -31,17 +31,7 @@ When `use_fake` is true, `OPENAI_API_KEY` may be empty. When it is false, the ke
 Answer(content=f"[FAKE] {question.question}")
 ```
 
-Same `Answer` type as the real path. Other fields stay at defaults (`cost_usd=0.0`, and so on). The `[FAKE]` prefix makes it obvious you did not hit the API.
-
-## `ask_llm` branch
-
-```python
-def ask_llm(question: Question, settings: Settings | None = None) -> Answer:
-    cfg = settings if settings is not None else get_settings()
-    if cfg.use_fake:
-        return fake_ask_llm(question)
-    # real OpenAI client...
-```
+Same `Answer` type as the real path. Fake `cost_usd` stays `0.0`. With probability `fail_rate` it raises `FakeLLMError` so `ask_llm` can retry (see [ask_llm.md](ask_llm.md)).
 
 Pass `settings=` in tests so you do not rely on cached `get_settings()` or `.env`.
 

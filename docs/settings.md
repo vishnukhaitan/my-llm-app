@@ -64,6 +64,9 @@ Values are coerced to the field type: `"0.2"` becomes `float`, `"2000"` becomes 
 | `openai_model` | `OPENAI_MODEL` | Yes, unless `USE_FAKE=true` | `gpt-4o-mini` | |
 | `openai_base_url` | `OPENAI_BASE_URL` | No | `None` | Vocareum: `https://openai.vocareum.com/v1`. Empty string becomes `None` |
 | `use_fake` | `USE_FAKE` | No | `false` | Skip the real API; see [fake_llm.md](fake_llm.md) |
+| `fail_rate` | `FAIL_RATE` | No | `0.0` | Probability the fake raises `FakeLLMError` |
+| `max_retries` | `MAX_RETRIES` | No | `2` | Extra attempts after the first |
+| `retry_delay_s` | `RETRY_DELAY_S` | No | `0.5` | Base delay; doubles each attempt |
 | `app_env` | `APP_ENV` | No | `development` | |
 | `app_name` | `APP_NAME` | No | `my-llm-app` | |
 | `log_level` | `LOG_LEVEL` | No | `INFO` | |
