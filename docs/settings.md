@@ -74,6 +74,7 @@ Values are coerced to the field type: `"0.2"` becomes `float`, `"2000"` becomes 
 | `llm_max_output_tokens` | `LLM_MAX_OUTPUT_TOKENS` | No | `2000` | Must be > 0 |
 | `host` | `HOST` | No | `0.0.0.0` | For a future API server |
 | `port` | `PORT` | No | `8000` | 1–65535 |
+| `results_db` | `RESULTS_DB` | No | `data/answers.db` | SQLite file; see [store.md](store.md) |
 
 Copy `.env.example` to `.env` and fill `OPENAI_API_KEY` and `OPENAI_MODEL`. Vocareum keys (`voc-...`) need `OPENAI_BASE_URL` set to the Vocareum gateway.
 

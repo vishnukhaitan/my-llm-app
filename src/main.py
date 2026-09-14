@@ -9,6 +9,7 @@ from src.cost import compute_cost_usd
 from src.fake_llm import FakeLLMError, fake_ask_llm
 from src.models import Answer, Question
 from src.settings import Settings, get_settings
+from src.store import connect, save_answer
 from src.tools import ANSWER_TOOL
 
 logger = logging.getLogger(__name__)
@@ -123,18 +124,36 @@ def ask_llm(question: Question, settings: Settings | None = None) -> Answer:
     raise RuntimeError(f"ask_llm exhausted retries: {last_err}")
 
 
+def persist_answer(question: Question, answer: Answer, settings: Settings) -> int:
+    """Write one Answer row to SQLite and return the row id."""
+    with connect(settings.results_db) as conn:
+        return save_answer(
+            conn,
+            question=question.question,
+            content=answer.content,
+            retries=answer.retries,
+            cost_usd=answer.cost_usd,
+            model=settings.openai_model,
+            confidence=answer.confidence,
+            sources=answer.sources,
+            schema_version=answer.schema_version,
+        )
+
+
 if __name__ == "__main__":
     settings = get_settings()
     logging.basicConfig(
         level=getattr(logging, settings.log_level.upper(), logging.INFO),
         format="%(levelname)s %(name)s: %(message)s",
     )
-    answer = ask_llm(
-        Question(question="Explain retrieval-augmented generation in three sentences."),
-        settings=settings,
+    question = Question(
+        question="Explain retrieval-augmented generation in three sentences."
     )
+    answer = ask_llm(question, settings=settings)
+    row_id = persist_answer(question, answer, settings)
     print(answer.content)
     print(
         f"cost_usd={answer.cost_usd} retries={answer.retries} "
         f"confidence={answer.confidence} sources={answer.sources}"
     )
+    print(f"saved row id={row_id} db={settings.results_db}")

@@ -27,6 +27,8 @@ Retries and real-path cost: [docs/ask_llm.md](docs/ask_llm.md).
 
 Structured answers via tools: [docs/tools.md](docs/tools.md).
 
+SQLite persistence: [docs/store.md](docs/store.md).
+
 ## Run smoke test
 
 ```bash

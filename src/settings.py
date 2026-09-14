@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Self
 
 from pydantic import Field, field_validator, model_validator
@@ -33,6 +34,7 @@ class Settings(BaseSettings):
     llm_max_output_tokens: int = Field(default=2000, gt=0)
     host: str = "0.0.0.0"
     port: int = Field(default=8000, gt=0, le=65535)
+    results_db: Path = Path("data/answers.db")
 
     @field_validator("openai_base_url", mode="before")
     @classmethod
