@@ -11,5 +11,6 @@ Markdown notes for features and code in `my-llm-app`.
 | [ask_llm.md](ask_llm.md) | `src/main.py` |
 | [tools.md](tools.md) | `src/tools.py` |
 | [store.md](store.md) | `src/store.py` |
+| [api.md](api.md) | `src/api/main.py` |
 
 Add a new `.md` file here when a feature is implemented (models, pipeline, API, and so on).

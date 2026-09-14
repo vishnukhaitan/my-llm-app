@@ -29,12 +29,20 @@ Structured answers via tools: [docs/tools.md](docs/tools.md).
 
 SQLite persistence: [docs/store.md](docs/store.md).
 
+HTTP API: [docs/api.md](docs/api.md).
+
 ## Run smoke test
 
 ```bash
 python -m src.main
 # or without an API call:
 USE_FAKE=true python -m src.main
+```
+
+## Run API
+
+```bash
+USE_FAKE=true uvicorn src.api.main:app --reload --port 8000
 ```
 
 ## Run tests
