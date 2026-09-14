@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from collections.abc import Iterator
 
 import openai
 from openai import OpenAI
@@ -122,6 +123,37 @@ def ask_llm(question: Question, settings: Settings | None = None) -> Answer:
             raise
 
     raise RuntimeError(f"ask_llm exhausted retries: {last_err}")
+
+
+def stream_answer(
+    question: Question, settings: Settings | None = None
+) -> Iterator[str]:
+    """Yield text chunks. Fake path splits words; real path uses stream=True.
+
+    Does not persist to SQLite (same as the demo streaming route).
+    """
+    cfg = settings if settings is not None else get_settings()
+    if cfg.use_fake:
+        text = fake_ask_llm(question, fail_rate=cfg.fail_rate).content
+        words = text.split(" ")
+        for i, word in enumerate(words):
+            yield word if i == len(words) - 1 else word + " "
+        return
+
+    stream = _make_client(cfg).chat.completions.create(
+        model=cfg.openai_model,
+        messages=[{"role": "user", "content": question.question}],
+        temperature=cfg.llm_temperature,
+        max_tokens=cfg.llm_max_output_tokens,
+        stream=True,
+    )
+    for chunk in stream:
+        if not getattr(chunk, "choices", None):
+            continue
+        delta = chunk.choices[0].delta
+        content = getattr(delta, "content", None)
+        if content:
+            yield content
 
 
 def persist_answer(question: Question, answer: Answer, settings: Settings) -> int:

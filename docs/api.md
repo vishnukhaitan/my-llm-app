@@ -14,8 +14,9 @@ Week 3-style FastAPI wrapper around `ask_llm` and SQLite. No new LLM logic.
 |---|---|---|---|
 | `GET` | `/health` | — | `{"status": "ok"}` |
 | `POST` | `/ask_batched` | `{"question": "..."}` | `Answer` JSON, row saved in SQLite |
+| `POST` | `/ask` | `{"question": "..."}` | `text/plain` stream; **not** saved to SQLite |
 
-`/ask_batched` means **one complete JSON answer**, not a token stream. Streaming `POST /ask` is step 9.
+`/ask_batched` is one complete JSON answer. `/ask` yields tokens as they arrive (`StreamingResponse`). Fake mode splits the canned text on spaces. Real mode uses `stream=True` (no tools on this path, so you get `delta.content` instead of `tool_calls`).
 
 Empty `question` → HTTP **422** (Pydantic `min_length=1`).
 
@@ -31,6 +32,11 @@ Another terminal:
 ```bash
 curl -s http://localhost:8000/health
 curl -s -X POST http://localhost:8000/ask_batched \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"What is RAG?"}'
+
+# streaming ( -N = no buffer )
+curl -N -X POST http://localhost:8000/ask \
   -H 'Content-Type: application/json' \
   -d '{"question":"What is RAG?"}'
 ```

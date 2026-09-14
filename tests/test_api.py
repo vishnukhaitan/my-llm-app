@@ -48,3 +48,30 @@ def test_ask_batched_fake_persists(tmp_path: Path) -> None:
         assert rows[0]["question"] == "What is RAG?"
     finally:
         app.dependency_overrides.clear()
+
+
+def test_ask_stream_fake_text(tmp_path: Path) -> None:
+    settings = Settings(
+        use_fake=True,
+        openai_api_key="",
+        openai_model="gpt-4o-mini",
+        results_db=tmp_path / "stream.db",
+        max_retries=0,
+        retry_delay_s=0.0,
+        fail_rate=0.0,
+    )
+    app.dependency_overrides[get_api_settings] = lambda: settings
+    try:
+        with (
+            TestClient(app) as client,
+            client.stream("POST", "/ask", json={"question": "What is RAG?"}) as response,
+        ):
+            assert response.status_code == 200
+            assert "text/plain" in response.headers.get("content-type", "")
+            text = "".join(response.iter_text())
+        assert "[FAKE]" in text
+        assert "What is RAG?" in text
+        with connect(settings.results_db) as conn:
+            assert query_results(conn) == []
+    finally:
+        app.dependency_overrides.clear()

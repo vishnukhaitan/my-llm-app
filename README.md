@@ -45,6 +45,8 @@ USE_FAKE=true python -m src.main
 USE_FAKE=true uvicorn src.api.main:app --reload --port 8000
 ```
 
+Streaming example: `curl -N -X POST http://127.0.0.1:8000/ask -H 'Content-Type: application/json' -d '{"question":"What is RAG?"}'`
+
 ## Run tests
 
 ```bash
