@@ -3,4 +3,5 @@
 __pycache__/
 .ipynb_checkpoints/
 *.pkl
+mp1_prompt_lab_executed.ipynb
 .DS_Store

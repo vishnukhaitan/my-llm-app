@@ -31,6 +31,8 @@ SQLite persistence: [docs/store.md](docs/store.md).
 
 HTTP API: [docs/api.md](docs/api.md).
 
+Compare models: [docs/compare_models.md](docs/compare_models.md).
+
 ## Run smoke test
 
 ```bash
@@ -46,6 +48,14 @@ USE_FAKE=true uvicorn src.api.main:app --reload --port 8000
 ```
 
 Streaming example: `curl -N -X POST http://127.0.0.1:8000/ask -H 'Content-Type: application/json' -d '{"question":"What is RAG?"}'`
+
+## Compare models
+
+```bash
+USE_FAKE=true python scripts/compare_models.py
+```
+
+Real API: two models × questions in `data/questions.csv` (default 3 questions). See [docs/compare_models.md](docs/compare_models.md).
 
 ## Run tests
 

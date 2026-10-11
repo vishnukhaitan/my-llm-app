@@ -19,19 +19,23 @@ Edit `.env` and set `OPENAI_API_KEY`. If you use Vocareum, also set `OPENAI_BASE
 From this folder, with the venv active:
 
 ```bash
-set -a && source .env && set +a
-jupyter notebook mp1_prompt_lab.ipynb
+python mp1_prompt_lab.py --checks-only   # parser + accuracy, no API
+python mp1_prompt_lab.py                 # 40 extractions + judge (uses pickle cache)
+python mp1_prompt_lab.py --refresh       # ignore cache, call the API again
 ```
 
-Or open the notebook in Cursor / VS Code with interpreter `mp1-prompt-lab/.venv/bin/python`.
+Or open `mp1_prompt_lab.ipynb` (same helpers) with interpreter `mp1-prompt-lab/.venv/bin/python`.
 
-Load data from `data/` (10 snippets + 10 golden rows). Fill the TODOs in the notebook, then write `mp1_writeup.md`.
+The first successful extraction and judge passes write `results_cache.pkl` and `scored_cache.pkl`. Reflection is in `mp1_writeup.md`; the table is also in `mp1_comparison.md`.
 
 ## Layout
 
 ```
 mp1-prompt-lab/
+  mp1_prompt_lab.py
   mp1_prompt_lab.ipynb
+  mp1_writeup.md
+  mp1_comparison.md
   requirements.txt
   .env.example
   data/job_snippets.jsonl
