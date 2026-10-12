@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import logging
 
+from src.rag.debug_log import log_step
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_SIZE = 500
@@ -64,6 +66,7 @@ def chunk_documents(
     Returns:
         Flat list of {chunk_id, source_id, text}.
     """
+    log_step(logger, "STEP chunk_documents START")
     logger.debug(
         "chunk_documents: %s docs size=%s overlap=%s",
         len(documents),
@@ -85,5 +88,5 @@ def chunk_documents(
                     "text": part,
                 }
             )
-    logger.debug("chunk_documents done: %s chunks total", len(chunks))
+    log_step(logger, f"STEP chunk_documents DONE ({len(chunks)} chunks)")
     return chunks

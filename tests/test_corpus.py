@@ -48,6 +48,13 @@ def test_load_corpus_tmp_dir(tmp_path: Path) -> None:
     assert "\n\n\n" not in leave["text"]
 
 
+def test_load_corpus_one_source_id() -> None:
+    docs = load_corpus(CORPUS, source_id="leave_policy")
+    assert len(docs) == 1
+    assert docs[0]["source_id"] == "leave_policy"
+    assert docs[0]["text"].strip()
+
+
 def test_load_real_corpus_has_twelve_nonempty_policies() -> None:
     docs = load_corpus(CORPUS)
     ids = {d["source_id"] for d in docs}

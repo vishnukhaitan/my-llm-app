@@ -31,3 +31,6 @@ Thumbs.db
 
 # Local SQLite
 data/*.db
+
+# Generated RAG index (rebuild with scripts/build_index.py)
+data/embeddings.json

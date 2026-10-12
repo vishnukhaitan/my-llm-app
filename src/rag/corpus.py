@@ -8,6 +8,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
+from src.rag.debug_log import log_step
+
 logger = logging.getLogger(__name__)
 
 SUPPORTED_SUFFIXES = {".md", ".txt"}
@@ -58,7 +60,10 @@ def clean_text(text: str) -> str:
     return cleaned
 
 
-def load_corpus(corpus_dir: Path | None = None) -> list[dict[str, str]]:
+def load_corpus(
+    corpus_dir: Path | None = None,
+    source_id: str | None = None,
+) -> list[dict[str, str]]:
     """Load supported documents from corpus_dir.
 
     Skips README and unknown extensions. Each item has source_id (filename
@@ -66,15 +71,18 @@ def load_corpus(corpus_dir: Path | None = None) -> list[dict[str, str]]:
 
     Args:
         corpus_dir: Folder of documents. Defaults to data/corpus.
+        source_id: If set, load only the file whose stem matches (e.g. leave_policy).
 
     Returns:
         Sorted list of document dicts.
     """
     root = Path(corpus_dir) if corpus_dir is not None else DEFAULT_CORPUS_DIR
-    logger.debug("load_corpus dir=%s", root)
+    log_step(logger, "STEP load_corpus START")
+    logger.debug("load_corpus dir=%s source_id=%s", root, source_id)
     documents: list[dict[str, str]] = []
     if not root.is_dir():
         logger.debug("load_corpus: not a directory, returning empty list")
+        log_step(logger, "STEP load_corpus DONE (0 documents)")
         return documents
     for path in sorted(root.iterdir()):
         if not path.is_file():
@@ -85,6 +93,9 @@ def load_corpus(corpus_dir: Path | None = None) -> list[dict[str, str]]:
             continue
         if path.suffix.lower() not in SUPPORTED_SUFFIXES:
             logger.debug("skip unsupported type: %s", path.name)
+            continue
+        if source_id is not None and path.stem != source_id:
+            logger.debug("skip other source: %s", path.name)
             continue
         text = clean_text(parse_document(path))
         logger.debug(
@@ -100,5 +111,5 @@ def load_corpus(corpus_dir: Path | None = None) -> list[dict[str, str]]:
                 "text": text,
             }
         )
-    logger.debug("load_corpus done: %s documents", len(documents))
+    log_step(logger, f"STEP load_corpus DONE ({len(documents)} documents)")
     return documents
