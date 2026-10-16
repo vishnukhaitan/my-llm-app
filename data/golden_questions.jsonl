@@ -1,0 +1,12 @@
+{"id": "q01", "question": "How many annual leave days do full-time employees get in their first two years?", "expected_source_id": "leave_policy"}
+{"id": "q02", "question": "How many weeks of paid parental leave does the birth parent receive?", "expected_source_id": "parental_leave"}
+{"id": "q03", "question": "How do I book a meeting room in Dubai or Bengaluru?", "expected_source_id": "meeting_rooms"}
+{"id": "q04", "question": "Do I need a VPN to reach private services from outside the office?", "expected_source_id": "vpn_setup"}
+{"id": "q05", "question": "How does paid sick leave work?", "expected_source_id": "sick_leave"}
+{"id": "q06", "question": "What is the work-from-home policy?", "expected_source_id": "wfh_policy"}
+{"id": "q07", "question": "How are business expenses reimbursed?", "expected_source_id": "expense_policy"}
+{"id": "q08", "question": "Should I store work passwords in the browser?", "expected_source_id": "security_passwords"}
+{"id": "q09", "question": "How long are questions to the internal assistant stored?", "expected_source_id": "data_retention"}
+{"id": "q10", "question": "What should I do if I see harassment at work?", "expected_source_id": "code_of_conduct"}
+{"id": "q11", "question": "In what order does a new joiner get IT access?", "expected_source_id": "it_onboarding"}
+{"id": "q12", "question": "What should the internal assistant do if the retrieved text does not contain the answer?", "expected_source_id": "llm_assistant_usage"}

@@ -14,5 +14,6 @@ Markdown notes for features and code in `my-llm-app`.
 | [api.md](api.md) | `src/api/main.py` |
 | [ask_rag.md](ask_rag.md) | `src/rag/ask_rag.py`, `src/rag/retrieve.py` |
 | [a6_api.md](a6_api.md) | `src/api/main.py` (`POST /ask_batched` RAG) |
+| [kpi/naive-rag-snapshot.md](kpi/naive-rag-snapshot.md) | `scripts/run_kpi.py` (written by a run) |
 
 Add a new `.md` file here when a feature is implemented (models, pipeline, API, and so on).
