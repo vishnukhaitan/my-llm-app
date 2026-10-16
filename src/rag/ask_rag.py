@@ -57,7 +57,7 @@ def ask_rag(
     """Retrieve k chunks, generate an answer, set sources to retrieved chunk ids.
 
     Tests pass embed_fn and llm_fn so this never needs a live API key.
-    FastAPI wiring is A6 — this function is the library entry point.
+    FastAPI POST /ask_batched calls this function.
     """
     cfg = settings if settings is not None else get_settings()
     log_step(logger, f"STEP ask_rag START k={k}")

@@ -13,5 +13,6 @@ Markdown notes for features and code in `my-llm-app`.
 | [store.md](store.md) | `src/store.py` |
 | [api.md](api.md) | `src/api/main.py` |
 | [ask_rag.md](ask_rag.md) | `src/rag/ask_rag.py`, `src/rag/retrieve.py` |
+| [a6_api.md](a6_api.md) | `src/api/main.py` (`POST /ask_batched` RAG) |
 
 Add a new `.md` file here when a feature is implemented (models, pipeline, API, and so on).
