@@ -31,6 +31,8 @@ SQLite persistence: [docs/store.md](docs/store.md).
 
 HTTP API: [docs/api.md](docs/api.md).
 
+Naive RAG (retrieve + answer from `data/embeddings.json`): [docs/ask_rag.md](docs/ask_rag.md).
+
 ## Run smoke test
 
 ```bash

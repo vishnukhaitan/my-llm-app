@@ -1,0 +1,75 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<head>
+<meta charset="utf-8">
+<title>A5 Naive RAG — retrieve and answer</title>
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.35; }
+  h1 { font-size: 18pt; }
+  h2 { font-size: 14pt; margin-top: 18pt; }
+  code, pre { font-family: Consolas, monospace; font-size: 10pt; }
+  pre { background: #f4f4f4; padding: 8pt; white-space: pre-wrap; }
+  table { border-collapse: collapse; margin: 8pt 0; }
+  th, td { border: 1px solid #999; padding: 4pt 8pt; text-align: left; }
+</style>
+</head>
+<body>
+<h1>Naive RAG retrieve and answer (A5)</h1>
+<p>A5 reads <code>data/embeddings.json</code> (built in A4), ranks chunks with NumPy cosine, then asks the chat model to answer from those chunks only. It does not start FastAPI. The HTTP route still calls <code>ask_llm</code> until A6.</p>
+<p><b>Related files:</b> <code>src/rag/retrieve.py</code>, <code>src/rag/ask_rag.py</code>, <code>scripts/ask_rag.py</code>, <code>src/rag/embeddings.py</code>, <code>tests/test_retrieve.py</code>, <code>tests/test_ask_rag.py</code>.</p>
+
+<h2>Run</h2>
+<p>Activate the venv first (<code>python</code> is not on the path otherwise):</p>
+<pre>source .venv/bin/activate
+LOG_LEVEL=DEBUG python scripts/ask_rag.py "How many annual leave days does Northstar grant?"</pre>
+<p>The index and the question must use the same embedding model. A file built with the real API is 1536-d (<code>text-embedding-3-small</code>). <code>USE_FAKE=true</code> uses 8-d vectors and will raise a dimension mismatch against a 1536-d file.</p>
+<p><code>--k</code> sets how many chunks go into the prompt (default 3). You cannot get more hits than rows in the JSON file.</p>
+
+<h2>What the live run did</h2>
+<p>Question: How many annual leave days does Northstar grant?</p>
+<p>Index at the time: 3 chunks, all from <code>leave_policy</code>, dim 1536. Date of the run: 16 Oct 2026.</p>
+
+<h2>1. Load the index</h2>
+<pre>STEP load_index (data/embeddings.json)</pre>
+<p>Reads the JSON A4 wrote. No API call. Each row has <code>chunk_id</code>, <code>source_id</code>, <code>text</code>, and <code>vector</code>.</p>
+
+<h2>2. Embed the question</h2>
+<pre>STEP ask_rag START k=3
+STEP retrieve START (k=3 index=3)
+STEP embed_batch START (OpenAI model=text-embedding-3-small n=1)
+POST https://openai.vocareum.com/v1/embeddings  →  200 OK
+STEP embed_batch DONE (1 vectors dim=1536)</pre>
+<p>One embedding request. The body is the question string and <code>text-embedding-3-small</code>. 200 OK means the key worked and the vector length matches the index (1536).</p>
+<p>The long <code>httpcore</code> / <code>openai._base_client</code> lines are the OpenAI SDK’s own debug log (TCP, TLS, headers). They are not extra RAG steps. <code>LOG_LEVEL=INFO</code> hides most of that.</p>
+
+<h2>3. Rank chunks (NumPy, local)</h2>
+<pre>hit leave_policy#0  score=0.7415  chars=500
+hit leave_policy#2  score=0.5522  chars=350
+hit leave_policy#1  score=0.4676  chars=500
+STEP retrieve DONE top=leave_policy#0,leave_policy#2,leave_policy#1</pre>
+<p>Cosine compares the question vector to every stored vector. Higher is closer.</p>
+<table>
+<tr><th>Chunk</th><th>Score</th><th>Why</th></tr>
+<tr><td>leave_policy#0</td><td>0.7415</td><td>Contains the 18 / 22 / 25 day table</td></tr>
+<tr><td>leave_policy#2</td><td>0.5522</td><td>Carry-over and public holidays</td></tr>
+<tr><td>leave_policy#1</td><td>0.4676</td><td>How to book leave</td></tr>
+</table>
+
+<h2>4. Chat completion</h2>
+<pre>ask_rag retrieved=['leave_policy#0', 'leave_policy#2', 'leave_policy#1']
+rag prompt chars=1479
+POST https://openai.vocareum.com/v1/chat/completions  →  200 OK</pre>
+<p>The user message is those three chunk texts plus the question. The system prompt says to use only that context. The model is <code>gpt-4o-mini</code> (<code>OPENAI_MODEL</code>), not the embedding model.</p>
+<p><code>finish_reason=stop</code> and <code>n_tool_calls=1</code> means the model returned structured fields (<code>content</code>, <code>confidence</code>, <code>sources</code>) instead of plain text. Usage on this run: 469 prompt tokens, 77 completion tokens, cost about $0.000117.</p>
+
+<h2>5. Printed answer</h2>
+<pre>Northstar Labs grants annual leave based on years of continuous service:
+0–2 years → 18 working days, 2–5 → 22, 5+ → 25.
+sources=['leave_policy#0', 'leave_policy#2', 'leave_policy#1']
+confidence=1.0</pre>
+<p><code>sources</code> on the final line are the retrieved chunk ids (what search returned), in score order. The model itself cited only <code>leave_policy#0</code> inside the tool call. <code>ask_rag</code> replaces that with the retrieved ids so the caller sees what was actually passed as context.</p>
+
+<h2>Tests (no API)</h2>
+<pre>pytest tests/test_retrieve.py tests/test_ask_rag.py -q</pre>
+<p>These inject vectors and a fake LLM function. They do not read <code>data/embeddings.json</code> and do not call Vocareum.</p>
+</body>
+</html>

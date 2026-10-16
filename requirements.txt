@@ -4,3 +4,4 @@ pydantic
 pydantic-settings
 fastapi
 uvicorn[standard]
+numpy>=1.26.0
