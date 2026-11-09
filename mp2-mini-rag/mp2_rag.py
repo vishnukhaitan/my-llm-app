@@ -77,27 +77,70 @@ def load_corpus(corpus_dir: Path) -> list[dict[str, Any]]:
 
 # ─── Step 2: Chunk each document ────────────────────────────────────────
 
+def _is_section_header(paragraph: str) -> bool:
+    """A section header is one short line that does not end with punctuation."""
+    if "\n" in paragraph or not paragraph or len(paragraph) > 80:
+        return False
+    if paragraph[-1] in ".?!;:":
+        return False
+    return 1 <= len(paragraph.split()) <= 12
+
+
 def chunk_document(doc: dict[str, Any]) -> list[dict[str, Any]]:
-    """Split a document into smaller chunks.
+    """Split a document on paragraphs, then pack them up to TARGET_CHUNK_SIZE.
 
-    Each chunk should be a dict with: source, title, section, text.
-
-    Approach (your choice):
-      - Simple: fixed-size windows (split text into N-character chunks with overlap)
-      - Smarter: split on paragraph boundaries (\\n\\n), then pack paragraphs
-        into chunks up to TARGET_CHUNK_SIZE characters
-
-    The reference solution uses the smarter approach, plus heuristic
-    section-header detection (short lines without terminal punctuation).
-    Either approach is acceptable.
-
-    TODO:
-      - Pick an approach
-      - Implement it
-      - Return list of chunk dicts
+    Short unpunctuated lines become the chunk's section. A new chunk repeats
+    the last CHUNK_OVERLAP characters of the previous chunk. A paragraph longer
+    than the target is split with the same overlap.
     """
-    # TODO: your code here
-    raise NotImplementedError("Implement chunk_document")
+    paragraphs = [part.strip() for part in re.split(r"\n\s*\n", doc["text"]) if part.strip()]
+    section = doc["title"]
+    chunks: list[dict[str, Any]] = []
+    parts: list[str] = []
+
+    def emit(text: str) -> None:
+        cleaned = text.strip()
+        if not cleaned:
+            return
+        chunks.append({
+            "source": doc["source"],
+            "title": doc["title"],
+            "section": section,
+            "text": cleaned,
+        })
+
+    def flush() -> None:
+        if parts:
+            emit("\n\n".join(parts))
+            parts.clear()
+
+    for paragraph in paragraphs:
+        if _is_section_header(paragraph):
+            flush()
+            section = paragraph
+            continue
+
+        if len(paragraph) > TARGET_CHUNK_SIZE:
+            flush()
+            start = 0
+            while start < len(paragraph):
+                end = min(start + TARGET_CHUNK_SIZE, len(paragraph))
+                emit(paragraph[start:end])
+                if end == len(paragraph):
+                    break
+                start = end - CHUNK_OVERLAP
+            continue
+
+        if parts and len("\n\n".join(parts + [paragraph])) > TARGET_CHUNK_SIZE:
+            flush()
+            overlap = chunks[-1]["text"][-CHUNK_OVERLAP:].strip()
+            if overlap:
+                parts.append(overlap)
+
+        parts.append(paragraph)
+
+    flush()
+    return chunks
 
 
 # ─── Step 3: Embed text ─────────────────────────────────────────────────
