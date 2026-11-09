@@ -180,15 +180,15 @@ def setup_collection() -> None:
 # ─── Step 5: Ingest chunks into Qdrant ──────────────────────────────────
 
 def ingest_chunks(chunks: list[dict[str, Any]]) -> None:
-    """Embed every chunk and upsert into Qdrant.
-
-    TODO:
-      - Call embed_texts on the chunk texts
-      - Build PointStruct objects (id=uuid, vector, payload=chunk dict)
-      - qdrant.upsert
-    """
-    # TODO: your code here
-    raise NotImplementedError("Implement ingest_chunks")
+    """Embed every chunk and upsert into Qdrant."""
+    if not chunks:
+        return
+    vectors = embed_texts([chunk["text"] for chunk in chunks])
+    points = [
+        PointStruct(id=str(uuid.uuid4()), vector=vector, payload=chunk)
+        for chunk, vector in zip(chunks, vectors)
+    ]
+    qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
 
 
 # ─── Step 6: Retrieve ───────────────────────────────────────────────────
