@@ -149,13 +149,12 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
     """Batch-embed a list of texts using OpenAI's embedding model.
 
     Returns a list of 1536-dim float vectors (same order as inputs).
-
-    TODO:
-      - Call openai.embeddings.create with EMBEDDING_MODEL and the texts
-      - Extract the embedding vectors from the response
     """
-    # TODO: your code here
-    raise NotImplementedError("Implement embed_texts")
+    if not texts:
+        return []
+    response = openai.embeddings.create(model=EMBEDDING_MODEL, input=texts)
+    ordered = sorted(response.data, key=lambda item: item.index)
+    return [item.embedding for item in ordered]
 
 
 # ─── Step 4: Set up the Qdrant collection ───────────────────────────────
