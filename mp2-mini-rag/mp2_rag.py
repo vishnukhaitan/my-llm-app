@@ -48,10 +48,20 @@ TARGET_CHUNK_SIZE = 500   # characters
 CHUNK_OVERLAP     = 80    # characters
 
 openai = OpenAI()
-qdrant = QdrantClient(
-    url=os.environ["QDRANT_URL"],
-    api_key=os.environ.get("QDRANT_API_KEY"),
-)
+
+
+def _make_qdrant() -> QdrantClient:
+    """Use Qdrant Cloud or Docker when QDRANT_URL is set, otherwise a local folder."""
+    url = os.environ.get("QDRANT_URL", "").strip()
+    api_key = os.environ.get("QDRANT_API_KEY", "").strip() or None
+    if url:
+        return QdrantClient(url=url, api_key=api_key)
+    storage = Path(__file__).parent / "qdrant_storage"
+    storage.mkdir(exist_ok=True)
+    return QdrantClient(path=str(storage))
+
+
+qdrant = _make_qdrant()
 
 
 # ─── Step 1: Load the corpus ────────────────────────────────────────────
@@ -160,14 +170,11 @@ def embed_texts(texts: list[str]) -> list[list[float]]:
 # ─── Step 4: Set up the Qdrant collection ───────────────────────────────
 
 def setup_collection() -> None:
-    """Create (or recreate) the Qdrant collection.
-
-    TODO:
-      - Use qdrant.recreate_collection
-      - VectorParams with EMBEDDING_DIM and Distance.COSINE
-    """
-    # TODO: your code here
-    raise NotImplementedError("Implement setup_collection")
+    """Create (or recreate) the Qdrant collection."""
+    qdrant.recreate_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=VectorParams(size=EMBEDDING_DIM, distance=Distance.COSINE),
+    )
 
 
 # ─── Step 5: Ingest chunks into Qdrant ──────────────────────────────────
