@@ -67,8 +67,12 @@ def load_corpus(corpus_dir: Path) -> list[dict[str, Any]]:
       - For each file, read its text and extract the first non-empty line as title
       - Return the list of doc dicts
     """
-    # TODO: your code here
-    raise NotImplementedError("Implement load_corpus")
+    docs: list[dict[str, Any]] = []
+    for path in sorted(corpus_dir.glob("*.txt")):
+        text = path.read_text(encoding="utf-8").strip()
+        title = next((line.strip() for line in text.splitlines() if line.strip()), path.stem)
+        docs.append({"source": path.name, "title": title, "text": text})
+    return docs
 
 
 # ─── Step 2: Chunk each document ────────────────────────────────────────
