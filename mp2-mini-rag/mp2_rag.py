@@ -196,13 +196,22 @@ def ingest_chunks(chunks: list[dict[str, Any]]) -> None:
 def retrieve(query: str, k: int = 3) -> list[dict[str, Any]]:
     """Retrieve top-k chunks for a query.
 
-    TODO:
-      - Embed the query
-      - qdrant.search with the query vector, limit=k
-      - Return list of chunk dicts (include score for citations)
+    qdrant-client 1.19 removed ``search``; ``query_points`` is the replacement.
+    Each returned chunk includes its cosine similarity ``score``.
     """
-    # TODO: your code here
-    raise NotImplementedError("Implement retrieve")
+    vector = embed_texts([query])[0]
+    response = qdrant.query_points(
+        collection_name=COLLECTION_NAME,
+        query=vector,
+        limit=k,
+        with_payload=True,
+    )
+    hits: list[dict[str, Any]] = []
+    for point in response.points:
+        payload = dict(point.payload or {})
+        payload["score"] = point.score
+        hits.append(payload)
+    return hits
 
 
 # ─── Step 7: Generate the answer ────────────────────────────────────────
