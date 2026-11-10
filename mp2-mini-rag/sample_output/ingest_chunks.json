@@ -1,0 +1,19 @@
+{
+  "return": null,
+  "collection": "mp2_sherlock",
+  "points_count": 89,
+  "sample_payloads": [
+    {
+      "source": "04_engineers_thumb.txt",
+      "title": "The Adventure of the Engineer's Thumb",
+      "section": "The Coining Operation",
+      "text": "warning had saved Hatherley's life. None of them are caught; they leave England.\n\nHatherley keeps his story but loses his thumb. Holmes points out the consolation: Hatherley now has, at the very least, a story to dine out on for life. \"You have lost a thumb, but you have gained a reputation,\" Holmes says.\n\nThe case, dated to the summer of 1889, was one of those whose villain Holmes never brought to justice — but whose puzzle he solved completely within twenty-four hours."
+    },
+    {
+      "source": "04_engineers_thumb.txt",
+      "title": "The Adventure of the Engineer's Thumb",
+      "section": "Victor Hatherley, Hydraulic Engineer",
+      "text": "The patient introduced himself as Victor Hatherley, a hydraulic engineer of twenty-six. He had set up his own consulting practice the year before at 16A Victoria Street, with capital inherited on coming of age. Business had been quiet: only three consultations and one small commission in the year. Hatherley lived alone, took meals at a restaurant, and had no near relatives in London."
+    }
+  ]
+}

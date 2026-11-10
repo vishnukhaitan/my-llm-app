@@ -1,0 +1,54 @@
+[
+  {
+    "question": "Who was the assistant working at Jabez Wilson's pawnshop, and what was his real identity?",
+    "hits": [
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "The Red-Headed League",
+        "score": 0.68931806,
+        "text": "Mr Jabez Wilson is a pawnbroker who runs a small shop near Coburg Square in London. He is a stout, florid man, and his most notable feature is his head of brilliantly red hair. Wilson presents himself at 221B Baker Street one autumn morning to consult Sherlock Holmes and Doctor Watson. He carries with him a clipped newspaper advertisement and a sheet of paper, and he is at first reluctant to tell his story, fearing he will be laughed at."
+      },
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "Holmes Investigates",
+        "score": 0.5960937,
+        "text": "Holmes asks Wilson about his pawnshop assistant. Spaulding, Wilson says, is small, quick, and clever, willing to work for half wages because he wishes to learn the trade. His only oddity is a fondness for photography, and he spends much time in the cellar developing pictures. Holmes notes that Spaulding has been with Wilson for about a month before the Red-Headed League advertisement appeared."
+      },
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "The Strange Work",
+        "score": 0.5680892,
+        "text": "Wilson's duty was strange in the extreme. Each morning from ten o'clock to two, he was to sit in the league's office and copy out the Encyclopaedia Britannica in longhand. He was not permitted to leave the office during these hours on any account, and the work paid four pounds weekly. The young assistant, Vincent Spaulding, would manage the pawnshop in his absence. For eight weeks Wilson copied the encyclopaedia faithfully, working his way through letters A and partway into B. He had been told t"
+      }
+    ]
+  },
+  {
+    "question": "What killed Julia Stoner at Stoke Moran, and how was the method discovered?",
+    "hits": [
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "Holmes Investigates",
+        "score": 0.5268209,
+        "text": "That afternoon, Holmes and Watson travel to Stoke Moran in Helen's absence (Doctor Roylott had gone to town). They examine the three bedrooms in the inhabited wing: Helen's old room, Julia's old room, and Doctor Roylott's room. In Julia's room (now Helen's), Holmes notes several oddities: a bell-rope that connects to nothing — it is a dummy, attached to a ventilator that opens into Doctor Roylott's bedroom rather than the outside air, as ventilators normally would. The bed is bolted to the floor"
+      },
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "Helen's Predicament",
+        "score": 0.49383122,
+        "text": "In the two years since Julia's death, Helen had lived alone with Doctor Roylott. She had recently become engaged to a Percy Armitage, second son of Mr Armitage of Crane Water near Reading. Two days before her visit to Holmes, repairs began on the wall of Helen's bedroom, and she was moved to the very room in which Julia had died. The night before her visit, she had heard the same low whistle her sister had described."
+      },
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "The Explanation",
+        "score": 0.4824431,
+        "text": "Doctor Roylott had trained the snake to climb the bell-rope through the ventilator and back. He whistled to call it home and rewarded it with milk. On the night of Julia's death, the snake had bitten her as she lay in bed — leaving no mark visible to a coroner because of its tiny puncture and its quick action. The bed was bolted in position so the victim could not be moved out of range. Holmes's blow on the rope had turned the snake back through the ventilator, and it had attacked the only livin"
+      }
+    ]
+  }
+]

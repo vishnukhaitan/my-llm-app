@@ -1,0 +1,52 @@
+[
+  {
+    "question": "Who was the assistant working at Jabez Wilson's pawnshop, and what was his real identity?",
+    "answer": "The assistant working at Jabez Wilson's pawnshop was Vincent Spaulding. His real identity is not explicitly stated in the excerpts, but he is described as small, quick, and clever, with a fondness for photography. He worked for half wages to learn the trade and managed the pawnshop while Wilson was occupied with the Red-Headed League. (Source: The Red-Headed League — Holmes Investigates and The Red-Headed League — The Strange Work)",
+    "citations": [
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "The Red-Headed League",
+        "score": 0.68932194
+      },
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "Holmes Investigates",
+        "score": 0.5961001
+      },
+      {
+        "source": "01_red_headed_league.txt",
+        "title": "The Red-Headed League",
+        "section": "The Strange Work",
+        "score": 0.56808937
+      }
+    ],
+    "latency_ms": 5602
+  },
+  {
+    "question": "What killed Julia Stoner at Stoke Moran, and how was the method discovered?",
+    "answer": "Julia Stoner was killed by a snake that had been trained by Doctor Roylott to climb through a ventilator and bite her as she lay in bed. The method was discovered when Holmes explained that the snake's bite left no visible mark due to its tiny puncture and quick action. Additionally, the bed was bolted in position to prevent Julia from moving out of range of the snake. This information was revealed in \"The Adventure of the Speckled Band\" in the section titled \"The Explanation.\"",
+    "citations": [
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "Holmes Investigates",
+        "score": 0.5268209
+      },
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "Helen's Predicament",
+        "score": 0.49383122
+      },
+      {
+        "source": "02_speckled_band.txt",
+        "title": "The Adventure of the Speckled Band",
+        "section": "The Explanation",
+        "score": 0.4824431
+      }
+    ],
+    "latency_ms": 3820
+  }
+]
