@@ -1,0 +1,42 @@
+Validating 2 questions from predefined_questions.jsonl…
+
+  ✓ q1_red_headed_league_assistant
+      Q: Who was the assistant working at Jabez Wilson's pawnshop, and what was his real identity?
+      Cited: 01_red_headed_league.txt
+      Expected: 01_red_headed_league.txt
+      Facts matched: 1/5
+      Latency: 5143ms
+
+  ✓ q2_speckled_band_murder_weapon
+      Q: What killed Julia Stoner at Stoke Moran, and how was the method discovered?
+      Cited: 02_speckled_band.txt
+      Expected: 02_speckled_band.txt
+      Facts matched: 4/6
+      Latency: 3370ms
+
+  Source-match: 2/2
+
+  Validating 3 questions from learner_questions.jsonl…
+
+  ✓ q3_blue_carbuncle_goose
+      Q: Who stole the Countess of Morcar's blue carbuncle, and how did the gem end up inside Henry Baker's Christmas goose?
+      Cited: 03_blue_carbuncle.txt
+      Expected: 03_blue_carbuncle.txt
+      Facts matched: 3/3
+      Latency: 3573ms
+
+  ✓ q4_engineers_thumb_coining
+      Q: At Beechmoor, what was the hydraulic press really stamping, and what cover story had been invented for it?
+      Cited: 04_engineers_thumb.txt
+      Expected: 04_engineers_thumb.txt
+      Facts matched: 3/3
+      Latency: 2879ms
+
+  ✓ q5_scandal_photograph_hiding_place
+      Q: Holmes used a smoke rocket and a cry of fire at Briony Lodge. Where did Irene Adler keep the King's photograph, and what did she do when the alarm was raised?
+      Cited: 05_scandal_in_bohemia.txt
+      Expected: 05_scandal_in_bohemia.txt
+      Facts matched: 3/3
+      Latency: 3236ms
+
+  Source-match: 3/3
