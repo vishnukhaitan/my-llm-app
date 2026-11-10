@@ -224,17 +224,37 @@ excerpts don't contain the answer, say so plainly. Cite the source (story title
 
 
 def answer(question: str, k: int = 3) -> dict[str, Any]:
-    """End-to-end: retrieve, format context, call LLM, return result.
-
-    TODO:
-      - Call retrieve(question, k=k)
-      - Format the retrieved chunks into a context string
-        (include "[Source: <title> — <section>]" before each)
-      - Call openai.chat.completions.create with SYSTEM_PROMPT and the user message
-      - Return dict with: question, answer, citations, latency_ms
-    """
-    # TODO: your code here
-    raise NotImplementedError("Implement answer")
+    """End-to-end: retrieve, format context, call LLM, return result."""
+    started = time.perf_counter()
+    hits = retrieve(question, k=k)
+    context = "\n\n".join(
+        f"[Source: {hit['title']} — {hit['section']}]\n{hit['text']}"
+        for hit in hits
+    )
+    response = openai.chat.completions.create(
+        model=CHAT_MODEL,
+        temperature=0,
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Question: {question}\n\nExcerpts:\n{context}"},
+        ],
+    )
+    text = (response.choices[0].message.content or "").strip()
+    citations = [
+        {
+            "source": hit.get("source"),
+            "title": hit.get("title"),
+            "section": hit.get("section"),
+            "score": hit.get("score"),
+        }
+        for hit in hits
+    ]
+    return {
+        "question": question,
+        "answer": text,
+        "citations": citations,
+        "latency_ms": round((time.perf_counter() - started) * 1000),
+    }
 
 
 # ─── Validation harness (provided — do not modify) ──────────────────────
